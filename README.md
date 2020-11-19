@@ -1,2 +1,0 @@
-# gcsomoza.github.io
-Portfolio
