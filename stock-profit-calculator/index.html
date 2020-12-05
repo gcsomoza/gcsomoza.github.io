@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web Based Calculator</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            #calculator {
+              margin-top: 10px;
+            }
+            .input-section {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                user-select: none;
+            }
+            .btn-calculator {
+                width: 100%;
+                margin-top: 10px;
+                color: #000;
+                font-size: 20px;
+                font-weight: 700;
+                background-color: #f2f2f2;
+                border-color: #ccc;
+            }
+            .btn-calculator:focus {
+                outline: none;
+            }
+            .input-section .text {
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            }
+            .input-section .text.active {
+              border: 1px solid #5079fd;
+              box-shadow: 0px 0px 4px #5079fd;
+            }
+            .input-section h2 {
+                height: 33px;
+                overflow-x: hidden;
+                padding: 5px;
+                font-size: 21px;
+            }
+            .input-section h5 {
+                height: 15px;
+                overflow-x: hidden;
+            }
+            .input-section h2, .input-section h5 {
+                margin-top: 0;
+                margin-bottom: 0;
+                overflow-y: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div id="calculator" class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+                    <div class="row input-section">
+                        <div class="col-xs-12">
+                            <label>Buying</label>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('buying.qty')">
+                            <span>Qty</span>
+                            <h2 v-html="input['buying.qty']" class="text text-right" :class="{'active': selectedInput=='buying.qty'}"></h2>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('buying.price')">
+                            <span>Price</span>
+                            <h2 v-html="input['buying.price']" class="text text-right" :class="{'active': selectedInput=='buying.price'}"></h2>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('buying.qty')">
+                            <span>Fee</span>
+                            <h5 v-html="buyingFeeString" class="text-right"></h5>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('buying.price')">
+                            <span>Gross</span>
+                            <h5 v-html="buyingTotalString" class="text-right"></h5>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Selling</label>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('selling.qty')">
+                            <span>Qty</span>
+                            <h2 v-html="input['selling.qty']" class="text text-right" :class="{'active': selectedInput=='selling.qty'}"></h2>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('selling.price')">
+                            <span>Price</span>
+                            <h2 v-html="input['selling.price']" class="text text-right" :class="{'active': selectedInput=='selling.price'}"></h2>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('selling.qty')">
+                            <span>Fee</span>
+                            <h5 v-html="sellingFeeString" class="text-right"></h5>
+                        </div>
+                        <div class="col-xs-6" @click="selectInput('selling.price')">
+                            <span>Gross</span>
+                            <h5 v-html="sellingTotalString" class="text-right"></h5>
+                        </div>
+                        <div class="col-xs-12">
+                            <label>Profit</label>
+                        </div>
+                        <div class="col-xs-12 text-right">
+                            <h2 v-html="profitString" class="text-right"></h2>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="clear">Clear</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="backspace"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                        </div>
+                    
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('7')">7</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('8')">8</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('9')">9</button>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('4')">4</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('5')">5</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('6')">6</button>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('1')">1</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('2')">2</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('3')">3</button>
+                        </div>
+                        
+                        <div class="col-xs-8">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('0')">0</button>
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-calculator btn-lg" @click="inputNumber('.')">.</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="js/vue.js"></script>
+        <script type="text/javascript">
+            const app = new Vue({
+                el: '#calculator',
+                data() {
+                    return {
+                        input: {
+                          'buying.qty': '0',
+                          'buying.price': '0',
+                          'selling.qty': '0',
+                          'selling.price': '0'
+                        },
+                        selectedInput: 'buying.qty',
+                        buying: {
+                          fee: 0.0,
+                          total: 0.0
+                        },
+                        selling: {
+                          fee: 0.0,
+                          total: 0.0
+                        },
+                        profit: 0.0,
+                        calculateTimeout: 0,
+                    }
+                },
+                methods: {
+                    numberWithCommas(x) {
+                        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    },
+                    clear() {
+                        this.input['buying.qty'] = '0';
+                        this.input['buying.price'] = '0';
+                        this.input['selling.qty'] = '0';
+                        this.input['selling.price'] = '0';
+                        this.buying.fee = 0.0;
+                        this.buying.total = 0.0;
+                        this.selling.fee = 0.0;
+                        this.selling.total = 0.0;
+                        this.profit = 0.0;
+                        this.selectedInput = 'buying.qty';
+                    },
+                    backspace() {
+                        clearTimeout(this.calculateTimeout);
+                        
+                        const selectedInput = this.selectedInput
+                        if(this.input[selectedInput] == '0.') this.input[selectedInput] = '0';
+                        else if(this.input[selectedInput].length > 0) this.input[selectedInput] = this.input[selectedInput].slice(0, -1);
+                        
+                        this.calculateTimeout = setTimeout(() => this.calculate(), 300);
+                    },
+                    inputNumber(number) {
+                        clearTimeout(this.calculateTimeout);
+                        
+                        const selectedInput = this.selectedInput
+                        if(number == '.') {
+                            if(this.input[selectedInput] == "") this.input[selectedInput] += '0' + number;
+                            else if(!this.input[selectedInput].includes('.')) this.input[selectedInput] += number;
+                        }
+                        else if(number == '0') {
+                            if(this.input[selectedInput] != "") this.input[selectedInput] += number;
+                        }
+                        else {
+                            if(this.input[selectedInput] == '0') {
+                              this.input[selectedInput] = number;
+                            }
+                            else {
+                              this.input[selectedInput] += number;
+                            }
+                        }
+                        
+                        this.calculateTimeout = setTimeout(() => this.calculate(), 300);
+                    },
+                    selectInput(selectedInputValue) {
+                      this.selectedInput = selectedInputValue
+                    },
+                    calculateBuyingFee(buyingAmount) {
+                      const brokerCommisionPercent = 0.25;
+                      const securitiesClearingCorporationFeePercent = 0.01;
+                      const valueAddedTaxPercent = 12.0;
+                    
+                      const securitiesClearingCorporationFee = parseFloat((buyingAmount * (securitiesClearingCorporationFeePercent / 100)).toFixed(2))
+    
+                      let brokerCommision = parseFloat((buyingAmount * (brokerCommisionPercent / 100)).toFixed(2))
+                      brokerCommision = (brokerCommision < 20) ? 20 : brokerCommision
+                      
+                      const valueAddedTax = parseFloat((brokerCommision * (valueAddedTaxPercent / 100)).toFixed(2))
+                      
+                      const fee = parseFloat((securitiesClearingCorporationFee + brokerCommision + valueAddedTax).toFixed(2))
+                      
+                      return fee
+                    },
+                    calculateSellingFee(sellingAmount) {
+                      const brokerCommisionPercent = 0.25;
+                      const securitiesClearingCorporationFeePercent = 0.01;
+                      const valueAddedTaxPercent = 12.0;
+                      const salesTaxPercent = 0.6;
+                    
+                      const securitiesClearingCorporationFee = parseFloat((sellingAmount * (securitiesClearingCorporationFeePercent / 100)).toFixed(2))
+                      
+                      let brokerCommision = parseFloat((sellingAmount * (brokerCommisionPercent / 100)).toFixed(2))
+                      brokerCommision = (brokerCommision < 20) ? 20 : brokerCommision
+                      
+                      const valueAddedTax = parseFloat((brokerCommision * (valueAddedTaxPercent / 100)).toFixed(2))
+                      
+                      const salesTax = parseFloat((sellingAmount * (salesTaxPercent / 100)).toFixed(2))
+                      
+                      const fee = parseFloat((securitiesClearingCorporationFee + brokerCommision + valueAddedTax + salesTax).toFixed(2))
+                      
+                      return fee
+                    },
+                    calculate() {
+                      const buyingQty = (this.input['buying.qty'] != '') ? parseInt(this.input['buying.qty']) : 0;
+                      const buyingPrice = (this.input['buying.price'] != '') ? parseFloat(this.input['buying.price']) : 0;
+                      const sellingQty = (this.input['selling.qty'] != '') ? parseInt(this.input['selling.qty']) : 0;
+                      const sellingPrice = (this.input['selling.price'] != '') ? parseFloat(this.input['selling.price']) : 0;
+                      
+                      const buyingTotal = parseFloat((buyingQty * buyingPrice).toFixed(2));
+                      this.buying.fee = this.calculateBuyingFee(buyingTotal);
+                      this.buying.total = buyingTotal;
+                      
+                      const sellingTotal = parseFloat((sellingQty * sellingPrice).toFixed(2));
+                      this.selling.fee = this.calculateSellingFee(sellingTotal);
+                      this.selling.total = sellingTotal;
+                      
+                      const totalFee = parseFloat((this.buying.fee + this.selling.fee).toFixed(2));
+                      this.profit = parseFloat((this.selling.total - this.buying.total - totalFee).toFixed(2));
+                    }
+                },
+                computed: {
+                    buyingFeeString() {
+                        return this.numberWithCommas(this.buying.fee);
+                    },
+                    buyingTotalString() {
+                        return this.numberWithCommas(this.buying.total);
+                    },
+                    sellingFeeString() {
+                        return this.numberWithCommas(this.selling.fee);
+                    },
+                    sellingTotalString() {
+                        return this.numberWithCommas(this.selling.total);
+                    },
+                    profitString() {
+                        return this.numberWithCommas(this.profit);
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
