@@ -1,0 +1,23 @@
+.card {
+  margin-top: 20px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 10px;
+}
+.card .title h2 {
+  margin: 5px 0;
+  height: 33px;
+}
+.card .footer h2 {
+  margin: 5px 10px;
+}
+
+.input-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.input-area textarea {
+  height: 80vh;
+}
