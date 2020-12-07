@@ -32,6 +32,11 @@ const app = new Vue({
     const stocks = [];
     for(let i = 1; i < investments.length; i++) {
       const investment = investments[i];
+      
+      if(investment[4] == "Sold") {
+        continue;
+      }
+      
       const profit = calculateProfit({
         buyingQty: investment[1],
         buyingPrice: investment[2],
