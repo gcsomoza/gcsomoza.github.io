@@ -108,5 +108,15 @@ const app = new Vue({
       }
       this.stocks = stocks;
     }
+  },
+  computed: {
+    totalCash() {
+      let totalCash = 0;
+      for(let i = 0; i < this.stocks.length; i++) {
+        const stock = this.stocks[i];
+        totalCash += stock.sellTotal - stock.sellFee;
+      }
+      return totalCash;
+    }
   }
 });
