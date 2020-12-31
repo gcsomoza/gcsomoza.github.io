@@ -231,26 +231,32 @@
                     calculateBuyingFee(buyingAmount) {
                       const brokerCommisionPercent = 0.25;
                       const securitiesClearingCorporationFeePercent = 0.01;
+                      const pseTransFeePercent = 0.005;
                       const valueAddedTaxPercent = 12.0;
                     
                       const securitiesClearingCorporationFee = parseFloat((buyingAmount * (securitiesClearingCorporationFeePercent / 100)).toFixed(2))
+                      
+                      const pseTransFee = parseFloat((buyingAmount * (pseTransFeePercent / 100)).toFixed(2))
     
                       let brokerCommision = parseFloat((buyingAmount * (brokerCommisionPercent / 100)).toFixed(2))
                       brokerCommision = (brokerCommision < 20) ? 20 : brokerCommision
                       
                       const valueAddedTax = parseFloat((brokerCommision * (valueAddedTaxPercent / 100)).toFixed(2))
                       
-                      const fee = parseFloat((securitiesClearingCorporationFee + brokerCommision + valueAddedTax).toFixed(2))
+                      const fee = parseFloat((securitiesClearingCorporationFee + pseTransFee + brokerCommision + valueAddedTax).toFixed(2))
                       
                       return fee
                     },
                     calculateSellingFee(sellingAmount) {
                       const brokerCommisionPercent = 0.25;
                       const securitiesClearingCorporationFeePercent = 0.01;
+                      const pseTransFeePercent = 0.005;
                       const valueAddedTaxPercent = 12.0;
                       const salesTaxPercent = 0.6;
                     
                       const securitiesClearingCorporationFee = parseFloat((sellingAmount * (securitiesClearingCorporationFeePercent / 100)).toFixed(2))
+                      
+                      const pseTransFee = parseFloat((sellingAmount * (pseTransFeePercent / 100)).toFixed(2))
                       
                       let brokerCommision = parseFloat((sellingAmount * (brokerCommisionPercent / 100)).toFixed(2))
                       brokerCommision = (brokerCommision < 20) ? 20 : brokerCommision
@@ -259,7 +265,7 @@
                       
                       const salesTax = parseFloat((sellingAmount * (salesTaxPercent / 100)).toFixed(2))
                       
-                      const fee = parseFloat((securitiesClearingCorporationFee + brokerCommision + valueAddedTax + salesTax).toFixed(2))
+                      const fee = parseFloat((securitiesClearingCorporationFee + pseTransFee + brokerCommision + valueAddedTax + salesTax).toFixed(2))
                       
                       return fee
                     },
