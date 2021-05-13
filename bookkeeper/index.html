@@ -97,22 +97,27 @@
         <form id="contact__form">
           <div>
             <label for="name">Name</label><br>
-            <input type="text" id="name" name="name" />
+            <input type="text" id="name" name="name" required />
           </div>
           <div>
             <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" />
+            <input type="email" id="email" name="email" required />
           </div>
           <div>
             <label for="subject">Subject</label><br>
-            <input type="text" id="subject" name="subject" />
+            <input type="text" id="subject" name="subject" required />
           </div>
           <div>
             <label for="message">Message</label><br>
-            <textarea id="message" name="message" rows="5"></textarea>
+            <textarea id="message" name="message" rows="5" required></textarea>
           </div>
-          <button>Submit</button>
+          <button>
+            <div>
+              Submit <span class="loader hidden"></span>
+            </div>
+          </button>
         </form>
+        <div class="message hidden">Thank you for getting in touch!</div>
       </div>
     </section>
     <footer>
@@ -121,6 +126,35 @@
   </body>
   <script>
     const contact__form = document.getElementById('contact__form');
+    
+    const displayLoader = function(isShow) {
+      const loader = document.querySelector('#contact__form button .loader');
+      if(isShow) {
+        loader.classList.remove('hidden');
+        loader.classList.add('show');
+      }
+      else {
+        loader.classList.remove('show');
+        loader.classList.add('hidden');
+      }
+    }
+    
+    const displayMessage = function(message, isSuccess) {
+      const div = document.querySelector('.message');
+      div.innerHTML = message;
+      if(isSuccess) {
+        div.classList.remove('text-danger');
+        div.classList.add('text-success');
+      }
+      else {
+        div.classList.remove('text-success');
+        div.classList.add('text-danger');
+      }
+      div.classList.remove('hidden');
+      div.classList.add('show');
+      
+      displayLoader(false);
+    }
     
     const serialize = function (form) {
       var field,
@@ -152,25 +186,33 @@
     };
     
     contact__form.addEventListener('submit', function (event) {
+      displayLoader(true);
+      
       event.preventDefault();
       const data = serialize(contact__form);
       const xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            if(this.status == 200) {
-              console.log(this.responseText);
-              contact__form.reset();
-              alert('Thank you for contacting us.');
-            }
-            else {
-              console.log(this.responseText);
-              alert("Something went wrong. Please try again.");
-            }
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          if(this.status == 200) {
+            contact__form.reset();
+            const message = 'Thank you for getting in touch!';
+            displayMessage(message, true);
           }
-        };
-        xhttp.open("POST", "https://script.google.com/macros/s/AKfycbwgQc_i2bFhtsN-fDXquUXFMPoNksYtVjmqYwn4a-LDylfWw2S_gZuRwVZPkkfJEK64ag/exec", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(data);
+          else {
+            const message = "Something went wrong. Please try again.";
+            const div = document.querySelector('.message');
+            displayMessage(message, false);
+          }
+        }
+      };
+      xhttp.onerror = function() {
+        const message = "Something went wrong. Please try again.";
+        const div = document.querySelector('.message');
+        displayMessage(message, false);
+      };
+      xhttp.open("POST", "https://script.google.com/macros/s/AKfycbwgQc_i2bFhtsN-fDXquUXFMPoNksYtVjmqYwn4a-LDylfWw2S_gZuRwVZPkkfJEK64ag/exec", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send(data);
     });
   </script>
 </html>
