@@ -48,7 +48,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-color: #658625;
+  background-color: #95a27b;
   background-blend-mode: screen;
   
   z-index: -1;
@@ -59,6 +59,16 @@ body {
   top: 0;
   text-align: left;
   padding: 0 10px;
+}
+
+.hero .attribution {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0 10px;
+  text-align: right;
+  font-size: 0.75rem;
 }
 
 .hero .content {
@@ -79,6 +89,15 @@ body {
 }
 .hero .avatar img {
   width: inherit;
+}
+
+.hero h1, h2, h3 {
+  margin: 0;
+}
+.hero h3 {
+  margin: 20px 0;
+  font-size: 1rem;
+  font-style: italic;
 }
 
 .hero a.button {
