@@ -126,7 +126,7 @@ a:active {
   right: 0;
   padding: 0 10px;
   text-align: right;
-  font-size: 0.75rem;
+  font-size: 0.5rem;
 }
 
 .hero .content {
@@ -242,4 +242,10 @@ section#contact #contact__form button span {
 
 section#contact .message {
   margin-top: 10px;
+}
+
+footer .attribution {
+  font-size: 0.5rem;
+  font-style: italic;
+  text-align: right;
 }
