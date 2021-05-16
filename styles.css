@@ -9,13 +9,16 @@
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  margin: .75rem;
+  margin: 0;
+  padding: 0;
   font-family: 'Roboto Mono', monospace;
 }
 
@@ -27,9 +30,10 @@ body {
 .hero {
   position: relative;
   height: 100vh;
+  padding: 0 10px;
   text-transform: uppercase;
   text-align: center;
-  color: #fff;
+  color: #5b7723;
 }
 
 .hero:before {
@@ -40,12 +44,12 @@ body {
   bottom: 0;
   right: 0;
   
-  background-image: url('images/background-hero-1920x1080.jpg');
+  background-image: url('images/background.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-color: #9568a0;
-  background-blend-mode: luminosity;
+  background-color: #658625;
+  background-blend-mode: screen;
   
   z-index: -1;
 }
@@ -54,7 +58,7 @@ body {
   position: absolute;
   top: 0;
   text-align: left;
-  padding: 1.25rem;
+  padding: 0 10px;
 }
 
 .hero .content {
@@ -66,26 +70,28 @@ body {
   justify-content: center;
 }
 
-.hero h1 {
-  font-size: 3em;
+.hero .avatar {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #5b7723;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.hero .avatar img {
+  width: inherit;
 }
 
-.hero h3 {
-  font-size: 1.5em;
-}
-
-.hero button {
-  margin-top: 1.5rem;
-  padding: 1.05rem 1.5rem;
+.hero a.button {
+  text-decoration: none;
+  padding: 10px;
+  color: #5b7723;
+  border: 1px solid #5b7723;
   border-radius: 100vh;
-  background-color: #fff;
-  text-transform: uppercase;
-  font-family: 'Roboto Mono', monospace;
-  font-weight: bold;
-  font-size: 1.05em;
-  color: #000;
-  cursor: pointer;
 }
-.hero button:focus {
+.hero a.button:hover {
+  background-color: #5b7723;
+  color: #fff;
+}
+.hero a.button:focus {
   outline: none;
 }
