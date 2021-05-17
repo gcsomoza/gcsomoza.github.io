@@ -43,10 +43,30 @@ a:active {
   background-color: #5b7723;
   color: #fff;
 }
+.background--dark button {
+  background-color: #5b7723;
+  color: #fff;
+  border: 1px solid #fff;
+}
+.background--dark button:hover {
+  background-color: #d5e8ae;
+  color: #5b7723;
+  border: 1px solid #5b7723;
+}
 
 .background--light {
   background-color: #d5e8ae;
   color: #5b7723;
+}
+.background--light button {
+  background-color: #d5e8ae;
+  color: #5b7723;
+  border: 1px solid #5b7723;
+}
+.background--light button:hover {
+  background-color: #5b7723;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
 .text-success {
@@ -161,9 +181,9 @@ a:active {
 .hero a.button {
   text-decoration: none;
   padding: 10px;
+  border-radius: 100vh;
   color: #5b7723;
   border: 1px solid #5b7723;
-  border-radius: 100vh;
 }
 .hero a.button:hover {
   background-color: #5b7723;
@@ -222,10 +242,7 @@ section#contact #contact__form textarea {
 section#contact #contact__form button {
   width: 200px;
   padding: 8px 15px;
-  background-color: #5b7723;
-  color: #fff;
   font-size: 1.125rem;
-  border: 1px solid #fff;
   border-radius: 100vh;
   cursor: pointer;
 }
