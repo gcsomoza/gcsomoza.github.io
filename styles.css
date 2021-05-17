@@ -207,6 +207,7 @@ section#contact .contact__container {
   align-items: center;
   max-width: 400px;
   margin-bottom: 20px;
+  padding: 0 10px;
 }
 
 section#contact h1 {
@@ -225,7 +226,7 @@ section#contact #contact__form {
 
 section#contact #contact__form input,
 section#contact #contact__form textarea {
-  width: calc(100% - 22px);
+  width: 100%;
   padding: 10px;
   font-size: 1rem;
   border: 1px solid #5b7723;
