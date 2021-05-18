@@ -338,6 +338,23 @@ section#contact .message {
   margin-top: 10px;
 }
 
+
+footer .social__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+}
+footer .social__container > .social__account {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+footer .icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
 footer .attribution {
   font-size: 0.5rem;
   font-style: italic;
