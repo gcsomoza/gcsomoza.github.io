@@ -53,6 +53,21 @@ a:active {
   color: #5b7723;
   border: 1px solid #5b7723;
 }
+.background--dark a.button {
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 100vh;
+  color: #fff;
+  border: 1px solid #fff;
+}
+.background--dark a.button:hover {
+  background-color: #d5e8ae;
+  color: #5b7723;
+  border: 1px solid #5b7723;
+}
+.background--dark a.button:focus {
+  outline: none;
+}
 
 .background--light {
   background-color: #d5e8ae;
@@ -67,6 +82,21 @@ a:active {
   background-color: #5b7723;
   color: #fff;
   border: 1px solid #fff;
+}
+.background--light a.button {
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 100vh;
+  color: #5b7723;
+  border: 1px solid #5b7723;
+}
+.background--light a.button:hover {
+  background-color: #5b7723;
+  color: #fff;
+  border: 1px solid #fff;
+}
+.background--light a.button:focus {
+  outline: none;
 }
 
 .text-success {
@@ -198,6 +228,7 @@ section#projects {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 15px;
 }
 
 section#projects .projects__container {
@@ -212,7 +243,7 @@ section#projects .projects__container {
 section#projects .cards__container {
   display: grid;
   align-items: center;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-gap: 1rem;
 }
 section#projects .card {
@@ -233,6 +264,11 @@ section#projects .card > figure > figcaption {
   background-color: rgba(0,0,0,0.7);
   color: #fff;
 }
+section#projects .card > figure > img {
+  width: 100%;
+  height: 100%;
+}
+
 
 section#contact {
   display: flex;
