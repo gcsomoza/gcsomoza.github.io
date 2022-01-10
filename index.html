@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/png" href="images/g-logo-circle-edited.png"/>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
   <link rel="stylesheet" href="styles.css">
   <title>Gene Christian | Full Stack Web Developer</title>
 </head>
@@ -26,98 +27,15 @@
     </nav>
   </header>
 
+  <main id="home">
+    <div class="content">
+      <p class="greetings">HI THERE!</p>
+      <p class="introduction">I'M <span class="name">GENE CHRISTIAN SOMOZA</span></p>
+      <p class="title">FULL STACK WEB APPLICATION DEVELOPER</p>
+      <p class="quote">Let's solve your problems through web applications! You can count on me.</p>
+      <a href="#about"><button class="btn">About <i class="fas fa-user"></i></button></a>
+    </div>
+  </main>
+
 </body>
-
-<script>
-  const contact__form = document.getElementById('contact__form');
-  
-  const displayLoader = function(isShow) {
-    const loader = document.querySelector('#contact__form button .loader');
-    if(isShow) {
-      loader.classList.remove('hidden');
-      loader.classList.add('show');
-    }
-    else {
-      loader.classList.remove('show');
-      loader.classList.add('hidden');
-    }
-  }
-  
-  const displayMessage = function(message, isSuccess) {
-    const div = document.querySelector('.message');
-    div.innerHTML = message;
-    if(isSuccess) {
-      div.classList.remove('text-danger');
-      div.classList.add('text-success');
-    }
-    else {
-      div.classList.remove('text-success');
-      div.classList.add('text-danger');
-    }
-    div.classList.remove('hidden');
-    div.classList.add('show');
-    
-    displayLoader(false);
-  }
-  
-  const serialize = function (form) {
-    var field,
-      l,
-      s = [];
-
-    if (typeof form == 'object' && form.nodeName == "FORM") {
-      let len = form.elements.length;
-
-      for (let i = 0; i < len; i++) {
-        field = form.elements[i];
-        if (field.name && !field.disabled && field.type != 'button' && field.type != 'file' && field.type != 'hidden' && field.type != 'reset' && field.type != 'submit') {
-          if (field.type == 'select-multiple') {
-            l = form.elements[i].options.length;
-
-            for (let j = 0; j < l; j++) {
-              if (field.options[j].selected) {
-                s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
-              }
-            }
-          }
-          else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
-            s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value);
-          }
-        }
-      }
-    }
-    return s.join('&').replace(/%20/g, '+');
-  };
-  
-  contact__form.addEventListener('submit', function (event) {
-    displayLoader(true);
-    
-    event.preventDefault();
-    const data = serialize(contact__form);
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        if(this.status == 200) {
-          contact__form.reset();
-          const message = 'Thank you for getting in touch!';
-          displayMessage(message, true);
-        }
-        else {
-          const message = "Something went wrong. Please try again.";
-          const div = document.querySelector('.message');
-          displayMessage(message, false);
-        }
-      }
-    };
-    xhttp.onerror = function() {
-      const message = "Something went wrong. Please try again.";
-      const div = document.querySelector('.message');
-      displayMessage(message, false);
-    };
-    xhttp.open("POST", "https://script.google.com/macros/s/AKfycbz8ljq414a1oOSFRKKDBkeujpVTtkRb7YnMyiX4mNK7Eme0nRl3euy4dEL8as0u6AsV/exec", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(data);
-  });
-</script>
-
 </html>

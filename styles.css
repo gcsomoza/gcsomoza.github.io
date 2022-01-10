@@ -47,7 +47,13 @@ html::-webkit-scrollbar-thumb{
 body{
   background:#111;
   overflow-x: hidden;
-  padding-left: 35rem;
+  padding-left: 25rem;
+}
+
+main,
+section
+{
+  min-height: 100vh;
 }
 
 header{
@@ -105,6 +111,55 @@ header .navbar ul li a{
 }
 
 header .navbar ul li a:hover{
+  background:var(--green);
+  color:#333;
+}
+
+#home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  padding: 0;
+}
+
+#home .greetings,
+#home .introduction,
+#home .name,
+#home .title,
+#home .quote
+{
+  font-size: 2.15rem;
+  color: #fff;
+}
+
+#home .name {
+  color: var(--green);
+}
+
+#home .title {
+  font-size: 1.35rem;
+  color: #dfdfdf;
+}
+
+#home .quote {
+  padding: 1rem 0;
+  font-size: 1.15rem;
+  color: #dfdfdf;
+}
+
+#home .btn {
+  padding: .7rem 3rem;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1.35rem;
+  border-radius: 100vh;
+  border: none;
+}
+
+#home .btn:hover{
   background:var(--green);
   color:#333;
 }
