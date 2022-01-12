@@ -56,6 +56,7 @@ section
   min-height: 100vh;
 }
 
+
 header{
   position: fixed;
   top:0; left:0;
@@ -69,7 +70,6 @@ header{
   flex-flow: column;
   text-align: center;
 }
-
 header .avatar img {
   height:10rem;
   width:10rem;
@@ -78,28 +78,22 @@ header .avatar img {
   margin-bottom: 1rem;
   border:.4rem solid var(--green);
 }
-
 header .avatar .name{
   font-size: 2rem;
   color:#eee;
 }
-
 header .avatar .post{
   font-size: 1.75rem;
   color:var(--green);
 }
-
 header .navbar{
   width:100%;
 }
-
 header .navbar ul{
   list-style: none;
   padding:1rem 3rem;
   user-select: none;
 }
-
-
 header .navbar ul li a{
   display: block;
   padding:1rem;
@@ -109,11 +103,11 @@ header .navbar ul li a{
   font-size: 1.75rem;
   border-radius: 5rem;
 }
-
 header .navbar ul li a:hover{
   background:var(--green);
   color:#333;
 }
+
 
 #home {
   display: flex;
@@ -122,7 +116,6 @@ header .navbar ul li a:hover{
   flex-flow: column;
   padding: 0;
 }
-
 #home .greetings,
 #home .introduction,
 #home .name,
@@ -132,22 +125,18 @@ header .navbar ul li a:hover{
   font-size: 2.15rem;
   color: #fff;
 }
-
 #home .name {
   color: var(--green);
 }
-
 #home .title {
   font-size: 1.35rem;
   color: #dfdfdf;
 }
-
 #home .quote {
   padding: 1rem 0;
   font-size: 1.15rem;
   color: #dfdfdf;
 }
-
 #home .btn {
   padding: .7rem 3rem;
   background: #333;
@@ -158,8 +147,30 @@ header .navbar ul li a:hover{
   border-radius: 100vh;
   border: none;
 }
-
 #home .btn:hover{
   background:var(--green);
   color:#333;
+}
+
+
+#what-i-do {
+  padding: 0;
+  color: #fff;
+}
+#what-i-do .content {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  width: 100%;
+  padding: 1rem 5rem;
+}
+#what-i-do .content .projects {
+  width: 100%;
+  margin-top: 1rem;
+}
+#what-i-do .content .projects .hr {
+  width: 100%;
+}
+#what-i-do h1 span {
+  color: var(--green);
 }
