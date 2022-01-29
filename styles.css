@@ -57,13 +57,16 @@ a:active {
   text-decoration: none;
   padding: 10px;
   border-radius: 100vh;
-  color: #fff;
   border: 1px solid #fff;
+  color: #5b7723;
+  background-color: #d5e8ae;
+  opacity: 0.8;
 }
 .background--dark a.button:hover {
   background-color: #d5e8ae;
   color: #5b7723;
-  border: 1px solid #5b7723;
+  border: 1px solid #fff;
+  opacity: 1;
 }
 .background--dark a.button:focus {
   outline: none;
