@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gene Christian | MySQL SSH</title>
+    <link rel="stylesheet" href="/styles.css?v=2.0.0">
+</head>
+<body class="wallpaper">
+    <main>
+        <h1>Backup MySQL Database behind SSH</h1>
+        <p>
+            Backing-up MySQL Database is simple using mysqldump but if you don't have direct access to 
+            database server then how are you going to do that?
+        </p>
+        <p>
+            Let's say that we can only access the remote mysql server using ssh.
+        </p>
+        
+        <h2>Pre-requisite</h2>
+        <p>
+            You must have knowledge in using ssh, mysql, mysqldump commands.
+        </p>
+
+        <h2>Establish SSH Tunnel</h2>
+        <p>
+            This will serve as the middleman between the local machine and the remote mysql server.
+        </p>
+        <code>
+            ssh -i /path/to/id_rsa -L 3336:mysql_server_host:3306 user@remote_server
+        </code>
+
+        <h2>Backup MySQL Database using mysqldump</h2>
+        <p>
+            After establishing the SSH Tunnel, you can imagine that
+            the mysql server database is in your local machine.
+        </p>
+        <code>
+            mysqldump -u root -h 127.0.0.1 -P 3336 -p database_name table_name > table_name.sql
+        </code>
+
+        <h2>Restore MySQL Database using mysql</h2>
+        <p>
+            You can also do the same when restoring a mysql database backup from
+            your local machine going to the remote mysql server.
+        </p>
+        <code>
+            mysql -u root -h 127.0.0.1 -P 3336 -p database_name < table_name.sql
+        </code>
+    </main>
+    
+    <i class="attribution">Photo by fauxels from Pexels</i>
+</body>
+</html>

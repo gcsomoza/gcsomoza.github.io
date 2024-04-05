@@ -22,12 +22,41 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
+main {
+  padding: 1rem 1rem 2rem 1rem;
+}
+
 a {
   text-decoration: none;
 }
 
-.text-success {
-  color: green;
+.wallpaper:after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background-image: url('/images/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: #aaaaaa;
+  background-blend-mode: screen;
+
+  z-index: -1;
+}
+
+.attribution {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 0 10px;
+  text-align: right;
+  font-size: 0.5rem;
+  color: #5b7723;
 }
 
 .hero {
@@ -37,24 +66,6 @@ a {
   text-transform: uppercase;
   text-align: center;
   color: #5b7723;
-}
-
-.hero:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  
-  background-image: url('images/background.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-color: #95a27b;
-  background-blend-mode: screen;
-  
-  z-index: -1;
 }
 
 .hero .content {
@@ -71,16 +82,6 @@ a {
 }
 .hero .avatar img {
   max-width: inherit;
-}
-
-.hero .attribution {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0 10px;
-  text-align: right;
-  font-size: 0.5rem;
 }
 
 .button {
