@@ -48,6 +48,10 @@ a {
   z-index: -1;
 }
 
+.wallpaper.readable:after {
+  opacity: 0.4;
+}
+
 .attribution {
   display: block;
   position: fixed;
