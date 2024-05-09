@@ -44,6 +44,9 @@
             You can also do the same when restoring a mysql database backup from
             your local machine going to the remote mysql server.
         </p>
+        <p>
+            <i>I do not recommend this in production because the connection might cut while restoring</i>
+        </p>
         <code>
             mysql -u root -h 127.0.0.1 -P 3336 -p database_name < table_name.sql
         </code>
