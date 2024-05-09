@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gene Christian | MySQL Deadlock</title>
+    <link rel="stylesheet" href="/styles.css?v=2.0.1">
+    <style>
+        li:not(:first-child) { 
+            margin-top: 1rem;  
+        }
+    </style>
+</head>
+<body class="wallpaper readable">
+    <main>
+        <h1>MySQL Deadlock</h1>
+        <p>
+            To understand how MySQL Deadlock works, we will reproduce this error as simple as possible.
+        </p>
+        <p>
+            The example tables and columns used in the example below are assumed to be existing and ready to use.
+        </p>
+        <ol>
+            <li>Open 2 terminals then login to mysql on both terminals.</li>
+
+            <li>Start transaction on both terminals.</li>
+            
+            <li>On terminal #1, execute:</li>
+            <code>
+                UPDATE legs SET status = 0 WHERE leg_id = 708;<br>
+                -- Terminal #1 session holds the key for leg_id 708<br>
+                -- Query was executed successfully
+            </code>
+
+            <li>On terminal #2, execute:</li>
+            <code>
+                UPDATE legs SET status = 0 WHERE leg_id = 665;<br>
+                -- Terminal #2 session holds the key for leg_id 665<br>
+                -- Query was executed successfully
+            </code>
+            
+            <li>On terminal #1, execute:</li>
+            <code>
+                UPDATE legs SET update_date = NOW() WHERE leg_id = 665;<br>
+                -- Terminal #1 will wait for Terminal #2 to release leg_id 665<br>
+                -- Query not execute yet
+            </code>
+            
+            <li>On terminal #2, execute:</li>
+            <code>
+                UPDATE legs SET update_date = NOW() WHERE leg_id = 708;<br>
+                -- Terminal #2 will wait for Terminal #1 to release leg_id 708<br>
+                -- Terminal #2 will display deadlock error because Terminal #1 and Terminal #2 will infinitely wait for each.
+            </code>
+
+            <li>On terminal #1, the query you run in Step #5 will be executed successfully</li>
+
+            <li>You should rerun the whole transaction in Terminal #2 when deadlock occurred.</li>
+        </ol>
+    </main>
+    
+    <i class="attribution">Photo by fauxels from Pexels</i>
+</body>
+</html>
