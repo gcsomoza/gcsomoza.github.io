@@ -24,6 +24,9 @@
             <li>Open 2 terminals then login to mysql on both terminals.</li>
 
             <li>On terminal #2, set lock wait timeout to 5 seconds. This will make us wait for only 5 seconds.</li>
+            <code>
+                SET @@SESSION.innodb_lock_wait_timeout = 5;
+            </code>
 
             <li>Start transaction on both terminals.</li>
             
