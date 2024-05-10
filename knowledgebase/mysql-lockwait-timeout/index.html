@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gene Christian | MySQL Lockwait Timeout</title>
+    <link rel="stylesheet" href="/styles.css?v=2.0.1">
+    <style>
+        li:not(:first-child) { 
+            margin-top: 1rem;  
+        }
+    </style>
+</head>
+<body class="wallpaper readable">
+    <main>
+        <h1>MySQL Lockwait Timeout</h1>
+        <p>
+            To understand how MySQL lock wait timeout works, we will reproduce this error as simple as possible.
+        </p>
+        <p>
+            The example tables and columns used in the example below are assumed to be existing and ready to use.
+        </p>
+        <ol>
+            <li>Open 2 terminals then login to mysql on both terminals.</li>
+
+            <li>On terminal #2, set lock wait timeout to 5 seconds. This will make us wait for only 5 seconds.</li>
+
+            <li>Start transaction on both terminals.</li>
+            
+            <li>On terminal #1, execute:</li>
+            <code>
+                UPDATE legs SET status = 0 WHERE leg_id = 708;<br>
+                -- Terminal #1 session holds the key for leg_id 708<br>
+                -- Query was executed successfully
+            </code>
+
+            <li>On terminal #2, execute:</li>
+            <code>
+                UPDATE legs SET status = 0 WHERE leg_id = 708;<br>
+                -- Terminal #2 will wait for Terminal #1 to release its hold on leg_id 708 for 5 seconds<br>
+                -- We will wait for 5 seconds to trigger the lock wait timeout error
+            </code>
+
+            <li>You should rerun the whole transaction in Terminal #2 when lock wait timeout occurred.</li>
+        </ol>
+    </main>
+    
+    <i class="attribution">Photo by fauxels from Pexels</i>
+</body>
+</html>
