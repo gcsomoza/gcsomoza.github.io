@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTO Reviewer 2024 Tagalog</title>
+</head>
+<style>
+    body {
+        background: black;
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+    }
+    .panel {
+        margin: 1rem auto;
+        width: 700px;
+        border: 1px solid rgb(66, 62, 62);
+        border-radius: 4px;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: rgb(25, 53, 191);
+        color: white;
+    }
+    .content .question {
+        margin: 1rem;
+        padding: 1rem;
+        border: 1px solid rgb(66, 62, 62);
+        border-radius: 4px;
+    }
+    .content .options {
+        display: flex;
+        justify-content: space-evenly;
+        grid-gap: 1rem;
+        margin: 1rem;
+        padding: 1rem;
+    }
+    .content .options img {
+        width: 100px;
+    }
+    .content .options .option-wrapper {
+        width: 100%;
+    }
+    .content .options .option {
+        padding: 1rem;
+        border-top: 1px solid rgb(168, 168, 168);
+        cursor: pointer;
+    }
+    .content .options .option.correct {
+        background-color: green;
+        color: white;
+    }
+    .content .options .option.wrong {
+        background-color: red;
+        color: white;
+    }
+    .content .options .option:last-child {
+        border-bottom: 1px solid rgb(168, 168, 168);
+    }
+    .footer {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        grid-gap: .5rem;
+        padding: 1rem;
+    }
+    .footer button {
+        padding: .5rem;
+    }
+</style>
+<body>
+    <div class="panel">
+        <div class="header">
+            <div>Questions: <span id="question_number"></span> out of <span id="question_total"></span></div>
+            <div>Code A1, A2</div>
+        </div>
+        <div class="content">
+            <div id="question" class="question"></div>
+            <div id="options" class="options"></div>
+        </div>
+        <div class="footer">
+            <span>Score: <span id="score"></span></span>
+            <button onclick="next()">Next</button>
+            <button onclick="finish()">Finish</button>
+        </div>
+    </div>
+</body>
+<script>
+    var questions = [
+        {
+            question: 'Ano ang ibig sabihin ng ilaw trapiko na ito?',
+            img: 'images/stoplight-red.png',
+            options: {
+                A: 'Huminto bago dumating sa stop line',
+                B: 'Magpatuloy sa pagmamaneho kung walang sagabal',
+                C: 'Huminto kapag inatasan ng enforcer',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kailan ka dapat magsignal kung ikaw ay liliko pakanan?',
+            img: '',
+            options: {
+                A: 'Habang lumiliko',
+                B: 'Pagkatapos lumiko',
+                C: 'Bago lumiko',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang angkop na senyas kung liliko sa kaliwa ay:',
+            img: '',
+            options: {
+                A: 'ang braso at kamay ay nakaunat pakaliwa',
+                B: 'ang kaliwang kamay ay nakaturo sa itaas',
+                C: 'kaliwang kamay na nakababa at nakaturo sa lupa',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang panuntunan sa Right-Of-Way ay nagbibigay ng:',
+            img: '',
+            options: {
+                A: 'pangunahing karapatan bilang mga driver',
+                B: 'mga batas kapag nagbibigay daan sa iba',
+                C: 'lahat ng nabanggit',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang gawaing paglabag sa pavement markings?',
+            img: '',
+            options: {
+                A: 'Pagbusina',
+                B: 'Biglang pagbagal ng takbo habang naka-berdeng ilaw',
+                C: 'Paghinto at pagbaba ng mga pasahero sa tawiran ng tao',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang aksyon na ito ay maaring magdulot sa iyo na mapasagadsad at mawalan ng kontrol kapag gumawa ka ng biglaang paglipat lalo na sa basa at posibleng madulas na kalsada:',
+            img: '',
+            options: {
+                A: 'hindi tamang pagpreno',
+                B: 'lumilikong mabagal',
+                C: 'akselerasyong napakabagal',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang busina ay para sa:',
+            img: '',
+            options: {
+                A: 'pampagising',
+                B: 'ingay',
+                C: 'magbigay babala para makaiwas sa disgrasya',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Hindi ka maaring bumusina maliban na lamang kung:',
+            img: '',
+            options: {
+                A: 'may mga umaandar na mga sasakyan na maaring magdulot sa iyo ng kapahamakan',
+                B: 'kailangan mong agawin ang pansin ng traffic enforcer',
+                C: 'magbigay ng senyales na ikaw ay paparating',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ayon sa R.A. 10666, ang bata ay maaring sumakay sa motorsiklo kung siya ay nakasuot ng standard protective helmet, komportableng naabot ng mga paa ang standard foot peg, at:',
+            img: '',
+            options: {
+                A: 'nakakapit ang bata sa rider\'s seat handle',
+                B: 'nakakahawak sa balikat ng dirver',
+                C: 'nakakayakap ng 360 degrees sa baywang ng driver',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kapag ginagamit ang pangunahing batas sa bilis bilang gabay, and pagpili ng bilis ay nakadepende sa:',
+            img: '',
+            options: {
+                A: 'bilis ng sasakyan na minamaneho',
+                B: 'kasanayan ng driver',
+                C: 'lahat ng nabanggit',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng pavement marking na ito?',
+            img: 'images/pavement-gilid-kalsada.png',
+            options: {
+                A: 'Bawal mag-overtake',
+                B: 'Bawal huminto',
+                C: 'Gilid ng kalsada',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Paano ka naapektuhan ng alak?',
+            img: '',
+            options: {
+                A: 'Pinapabilis nito ang iyong reaksyon',
+                B: 'Pinapabuti nito ang iyong kondisyon',
+                C: 'Pinapababa nito ang iyong konsentrasyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Totoo ba na ang kumikilos na pulang trapikong ilaw ay nangangahulugang dapat kang huminto hanggang ang sangandaan ay maging maaliwalas para magpatuloy?',
+            img: '',
+            options: {
+                A: 'Totoo',
+                B: 'Hindi totoo',
+                C: 'Walang sagot',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang sasakyan ay nakaparada kapag:',
+            img: '',
+            options: {
+                A: 'hindi gumagalaw ang sasakyan habang nagsasakay ng pasahero',
+                B: 'hindi gumagalaw ang sasakyan habang nagbababa ng pasahero',
+                C: 'ang sasakyan ay hindi gumagalaw habang patay ang makina',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng isang paunang babala na may riles ng tren?',
+            img: '',
+            options: {
+                A: 'Upang bigyan ng babala kaugnay ng bilis ng kanilang takbo',
+                B: 'Upang balaan ang mga motorista na hindi sila maaaring pumarada anumang oras',
+                C: 'Upang balaan ang mga motorista na may riles ng tren sa unahang bahagi ng kalsada',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Habang nagmamaneho gusto mong lumiko sa pakaliwa sa minor na kalsada. Paano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Manatili sa gitna ng daan',
+                B: 'Magmabilis na lumipat',
+                C: 'Huwag magmadali at ayusin lamang ang paglipat',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ayon sa R.A 10666, alin sa mga sumusunod ang nagbabawal sa driver na mag-angkas ng bata?',
+            img: '',
+            options: {
+                A: 'Kung ang itinakdang bilis ay higit sa 40 km/oras',
+                B: 'Kung ang itinakdang bilis ay higit sa 50 km/oras',
+                C: 'Kung ang itinakdang bilis ay higit sa 60 km/oras',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang nararapat mong gawin kung ang nakasabay mo ang sasakyang pangkagipitan gaya ng ambulansya, fire truck, sasakyan ng pulis sa kalsada na sumisirena?',
+            img: '',
+            options: {
+                A: 'Huwag silang pansinin gayong hindi ka naman nakasasagabal sa kanilang trabaho',
+                B: 'Magbigay daan sa pamamagitan ng paglipat sa kaliwa o gilid na bahagi ng kalsada depende sa kalagayan',
+                C: 'Harangan ang dadaanan at huwag hayaang makadaan ito',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang bilis ng pagmamaneho mo sa gabi ay dapat nakadepende sa:',
+            img: '',
+            options: {
+                A: 'pisikal at mental na kondisyon at husay ng driver',
+                B: 'kakayahan ng sasakyan at lagay ng panahon',
+                C: 'lahat ng sagot',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng sentas na ito?',
+            img: 'images/signs-noparking-mon-fri.png',
+            options: {
+                A: 'Maari kang magparada sa mga araw na ipinakita',
+                B: 'Walang paradahan kahit kailan',
+                C: 'Walang paradahan mula Lunes hanggang Biyernes',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Sa mga rotonda, alin sa mga sumusunod na mga sasakyan ang mayroong Right-Of-Way?',
+            img: '',
+            options: {
+                A: 'Ang sasakyan na nakaharap sa berdeng ilaw',
+                B: 'Mga sasakyan na papasok pa lang',
+                C: 'Mga sasakyan na nasa rotonda',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'May biglang tumawid sa kalsada at aandar ka na. Ano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Bumusina ng isang beses at hayaang tumawid ang tao',
+                B: 'Maghintay hanggang sa makatawid ang tao',
+                C: 'Paatrasin ang taong tumatawid',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang paglipat ng linya sa sangandaan ay:',
+            img: '',
+            options: {
+                A: 'napakaligtas',
+                B: 'ligtas',
+                C: 'hindi ligtas',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang dapat na kulay ng blinkers para sa mga mahahabang sasakyang mababagal ang takbo?',
+            img: '',
+            options: {
+                A: 'Asul',
+                B: 'Dilaw',
+                C: 'Pula',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Pinapahintulutang pumarada ang isang sasakyan kung:',
+            img: '',
+            options: {
+                A: 'lampas 4 metro sa boka-insendiyo o fire hydrant',
+                B: 'sa loob ng 3 metro ng interseksyon ng mga linyang kurbada',
+                C: 'sa loob ng interseksyon',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang traffic sign na "No Parking" ay nangangahulugan na:',
+            img: '',
+            options: {
+                A: 'maaring pumarada sa pasubaling ang minamaneho mo ay pribadong sasakyan',
+                B: 'hindi pwedeng huminto nang sandali kung hindi ay huhulihin dahil sa pagwawalang-halaga sa traffic sign',
+                C: 'maaring huminto sandali upang magsakay o magbaba ng mga paninda o pasahero at hindi dapat na nakakasagabal',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Alin sa mga nabanggit ang hindi nililimitahan ang bilis ng takbo?',
+            img: '',
+            options: {
+                A: 'Mga driver na umiiwas mahuli',
+                B: 'Mga doktor o kanilang driver na tutugon sa emergency',
+                C: 'Mga driver ng matataas na opisyal ng gobyerno',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Hindi ka dapat gumamit ng mobile phone habang nagmamaneho ng motorsiklo dahil:',
+            img: '',
+            options: {
+                A: 'mahina ang sagap ng mobile phone kung bukas ang makina ng motorsiklo',
+                B: 'maapektuhan nito ang electronic system ng iyong sasakyan',
+                C: 'ito ay ipinagbabawal ng batas at nakakasagabal ito sa iyong atensyon habang nagmamaneho',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng dilaw na ilaw pantrapiko na kumukurap-kurap',
+            img: '',
+            options: {
+                A: 'Bagalan ang takbo at magpatuloy kung walang panganib',
+                B: 'Hintayin hanggang maging berde ang ilaw',
+                C: 'Huminto at hintayin ang pulang ilaw',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Saan mo makikita ang senyas trapiko na ito?',
+            img: 'images/signs-tawiran-paaralan.png',
+            options: {
+                A: 'Sa dulo ng kalsada',
+                B: 'Sa palaruan',
+                C: 'Sa pook tawiran ng paaralan',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang sasakyan sa harapan mo ay nag di-dilaw na ilaw. Ang ibig sabihin nito ay:',
+            img: '',
+            options: {
+                A: 'sira ito',
+                B: 'mabagal na paggalaw',
+                C: 'kotse ng doktor',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang pinakamabigat na parusa sa pagmamaneho nang nakainom o nakadroga?',
+            img: '',
+            options: {
+                A: '6 na buwang suspendido ang lisensya',
+                B: '1 taong suspendido ang lisensya',
+                C: 'Pang habambuhay na suspendido ang lisensya',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ayon sa R.A. 4136, ang Student-driver\'s Permit ay maaring ibigay sa mga may malusog na pangangatawan at pag-iisip at dapat ay hindi bababa sa edad na:',
+            img: '',
+            options: {
+                A: '16 na taong gulang',
+                B: '18 na taong gulang',
+                C: '20 na taong gulang',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang ibig sabihin ng dobleng putol-putol na linya sa daan ay:',
+            img: '',
+            options: {
+                A: 'bawal na mag-overtake sa kaliwang parte',
+                B: 'bawal na mag-overtake sa kanang parte',
+                C: 'pwede kang mag-overtake sa kaliwa o sa kanan kapag walang panganib',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang kulay ng traffic light na nagsasabing GO o maari ka nang umandar?',
+            img: '',
+            options: {
+                A: 'Asul',
+                B: 'Berde',
+                C: 'Dilaw',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang dapat na haba ng saddle box o bag?',
+            img: '',
+            options: {
+                A: 'Ang haba ay hindi dapat lalampas sa dulong bahagi ng likuran ng 6 ng pulgada',
+                B: 'Ang haba ay hindi dapat lalampas sa dulong bahagi ng likuran',
+                C: 'Ang haba ay hindi dapat lumalampas sa upuan ng motorsiklo',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Maari kang mag-overtake sa highway kung ito ay may dalawang lane na may:',
+            img: '',
+            options: {
+                A: 'putol-putol na puting linya',
+                B: 'tuloy-tuloy na puting linya',
+                C: 'tuloy-tuloy na dilaw na linya',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Sa anong pagkakataon maaring pumarada sa harap ng pasukan ng ospital?',
+            img: '',
+            options: {
+                A: 'Kung ikaw ay bibili ng gamot',
+                B: 'Kung ikaw ay empleyado ng ospital',
+                C: 'Wala sa mga nabanggit',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang dobleng buong dilaw na linya ay:',
+            img: '',
+            options: {
+                A: 'hindi dapat tawirin kailanman',
+                B: 'hindi dapat tawirin maliban na lamang kung may pag-iingat',
+                C: 'wala sa pagpipilian',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng senyas trapiko na ito?',
+            img: 'images/signs-60kph-zone.png',
+            options: {
+                A: 'Ang tinakdang bilis sa lugar na ito ay hindi dapat bababa sa 60 kph',
+                B: 'Ang itininakdang bilis sa lugar na ito ay 60 kph',
+                C: 'May habang 60 km ang lugar na ito',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ayon sa batas, ano ang dapat mong gawin sa sandaling makarating sa isang interseksyon na may senyas na huminto?',
+            img: '',
+            options: {
+                A: 'Bagalan ang takbo at dumiretso kung ligtas na itong gawin',
+                B: 'Magbigay ng daan kung kinakailangan sa mga paparating na sasakyang nanggagaling sa kaliwa na kakanan',
+                C: 'Huminto at dumiretso kung ligtas na itong gawin',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang nararapat mong gawin kung ikaw ay papasok sa lugar na maraming ginagawang kalsada na pansamantalang ipinagbabawal ang pag-overtake?',
+            img: '',
+            options: {
+                A: 'Sundin lamang ang senyas kung rush hour',
+                B: 'Sundin ang senyas ayon sa nakasulat',
+                C: 'Sundin lamang kung ang traffic enforcer ay nakaduty',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Upang makatulong sa pagbawas ng polusyon sa hangin, ano ang dapat mong gawin sa iyong preno?',
+            img: '',
+            options: {
+                A: 'Pumreno ng maayos',
+                B: 'Pumreno nang madalas',
+                C: 'Pumreno nang biglaan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang gagawin mo kung ikaw ay paparating sa interseksyon at ang ilaw trapiko ay naging dilaw mula sa kulay berde?',
+            img: '',
+            options: {
+                A: 'Magpatuloy sa iyong kasalukuyang bilis',
+                B: 'Tumigil kahit na nasa interseksyon',
+                C: 'Tumigil bago ang interseksyon o bago ang linya sa paghinto',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng parisukat o parihabang traffic sign na may asul o puting ilaw?',
+            img: '',
+            options: {
+                A: 'Nagbibigay direksyon',
+                B: 'Warning sign',
+                C: 'tandang nagbibigay-kaalaman (Informative sign)',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Sa krus na daan walang mga babala o marka sa kalsada. May dalawang sasakyan na paparating, alin ang mas may prayoridad?',
+            img: '',
+            options: {
+                A: 'Ang mas mabilis na sasakyan',
+                B: 'Ang sasakyan na may mas maluwag na daan',
+                C: 'Wala',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Alin sa mga traffic light ang nagsasabi sa iyong maghanda sa paghinto?',
+            img: '',
+            options: {
+                A: 'Dilaw',
+                B: 'Berde',
+                C: 'Pula',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kapag papalapit sa isang crosswalk o linya ng taong naglalakad, dapat kang:',
+            img: '',
+            options: {
+                A: 'bumusina nang huminto sa pagtawid ang taong naglalakad',
+                B: 'huminto at maghintay sa taong naglalakad',
+                C: 'bilisan ang iyong bilis',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang dapat mong gawin kung nais mong bagalan ang takbo o huminto?',
+            img: '',
+            options: {
+                A: 'Bumusina para magsenyas',
+                B: 'Tapakan ng bahagya ang preno upang umilaw ang brake light',
+                C: 'Manatili sa iyong lane at saka huminto',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kung kailangan mong magsuot ng salamin sa mata upang makakita ng malinaw, kailan mo dapat itong isuot kung ikaw ay magmamaneho?',
+            img: '',
+            options: {
+                A: 'Sa hindi magandang panahon',
+                B: 'Sa gabi',
+                C: 'Sa lahat ng oras',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kung ito ang plaka ng iyong sasakyan, kailan mo dapat i-renew ang rehistro upang maiwasan ang multa?',
+            img: 'images/plate-no.png',
+            options: {
+                A: 'Hanggang ika-19 na araw ng ikalawang buwan ng taon',
+                B: 'Hanggang ika-9 na araw ng ikalawang buwan ng taon',
+                C: 'Hanggang sa huling linggo ng ika-apat na buwan ng taon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang paggamit ng mobile phone habang nagmamaneho ay delikado at:',
+            img: '',
+            options: {
+                A: 'ito ay labag sa batas at lahat ay saklaw sa batas',
+                B: 'ito ay labag sa batas maliban na lamang kung ginagamitan ng hands free device',
+                C: 'maari kung nakahinto ang sasakyan dahil sa traffic light sa interseksyon',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kung higit sa isang driver ang dumating sa four-way stop, sino sa kanila ang may karapatan sa daan?',
+            img: '',
+            options: {
+                A: 'Ang driver na unang dumating ang siyang unang dapat na umandar',
+                B: 'Ang driver na huling dumating and siyang unang dapat umandar',
+                C: 'Ang driver ng higit na malaking sasakyan ang siyang unang dapat na umandar',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang panglikong signal na ilaw ay dapat gamitin kapag:',
+            img: '',
+            options: {
+                A: 'nagmamaneho ng maayos',
+                B: 'ipaparating ang iyong intensyon sa mga driver na nasa paligid mo',
+                C: 'dapat kang bigyan ng daan',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang pagmamaneho ng higit na mabilis sa itinakdang bilis ay:',
+            img: '',
+            options: {
+                A: 'pinapayagan lamang kung mag-o-overtake sa isa pang sasakyan',
+                B: 'pinapayagan lamang kung ang ibang sasakyan ay magpapatakbo ng higit na mabilis sa itinakdang bilis',
+                C: 'ito ay ipinagbabawal ng batas maliban na lamang kung may emergency',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang traffic sign na ito ay nagsasabing "magbigay ng karapatan sa daan"',
+            img: '',
+            options: {
+                A: 'bailgtad na tatsulok',
+                B: 'patayong tatsulok',
+                C: 'hugis parihaba na may pulang border',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang traffic signs na nagbibigay ng impormasyon tungkol sa mga batas at regulasyong pantrapiko na kung hindi papansinin ay ituturing na paglabag ay tinatawag na:',
+            img: '',
+            options: {
+                A: 'regulatory signs',
+                B: 'warning signs',
+                C: 'informative signs',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kailan mo dapat suriin ang lebel ng langis ng iyong makina?',
+            img: '',
+            options: {
+                A: 'Kada 600 km',
+                B: 'Bago ang mahabang lakbayin',
+                C: 'Umagang umaga',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang mga mandato ng LTO ay magrehistro ng mga sasakyan na emission compliant at karapat-dapat gamitin, magbigay kaayusan sa kalsada, at:',
+            img: '',
+            options: {
+                A: 'panatilihin ang kalinisan sa kalsada',
+                B: 'bigyan ng lisensya ang mga dekalidad na driver',
+                C: 'gumawa ng patnubay na may kinalaman sa prangkisa ng mga sasakyang publiko',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang dapat mong gawin kung ang riles ng tren ay walang babala o warning devices?',
+            img: '',
+            options: {
+                A: 'Bilisan ang takbo at tumawid nang mabilis subalit huwag kalimutang suotin ang helmet',
+                B: 'Huminto sa layong 15 talampakan sa riles ng tren, lumabas sa sasakyan, lumakad sa loob ng riles, at suriin kung maluwag ang trapiko',
+                C: 'Bagalan ang takbo, suriin ang kaliwa at kanang bahagi ng riles',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng ilaw trapiko na ito?',
+            img: 'images/stoplight-yellow.png',
+            options: {
+                A: 'Humanda sa paghinto',
+                B: 'Huminto kapag nagpalit ng pula',
+                C: 'Huminto kung kinakailangan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Sakay ng manual clutch backbone ng motorsiklo, may asong biglang tumawid sa yong daan. Aling paa ang dapat mong gamitin upang matamo ang maksimum na preno upang hindi magasgasan ang aso?',
+            img: '',
+            options: {
+                A: 'Kaliwa',
+                B: 'Kanan',
+                C: 'Pareho',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang maksimum na parusa sa pulit-ulit na paglabag sa R.A. No. 10666 o Children\'s Safety on Motorcycle Act?',
+            img: '',
+            options: {
+                A: 'Pagkabilanggo ng anim (6) na taon',
+                B: 'Multang P50,000',
+                C: 'Pagbawi ng driver\'s liscense',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Aling lane ang dapat mong piliin matapos kang lumiko sa pakanan mula sa interseksyon patungong one-way street?',
+            img: '',
+            options: {
+                A: 'Manatili sa pinakakanan na lane',
+                B: 'Manatili sa pinakaloob na lane',
+                C: 'Manatili sa gitna ng kalsada',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang maximum na sukat ng pinasadyang top box ng motorsiklo?',
+            img: '',
+            options: {
+                A: '3ft x 3ft x 3ft',
+                B: '2ft x 2ft x 2ft',
+                C: '1.5ft x 1.5ft x 1.5ft',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Saan mo nararapat iposisyon ang iyong sasakyan kung ikaw ay nagpaplanong lumiko pakaliwa sa isang maliit na kalsada?',
+            img: '',
+            options: {
+                A: 'Sa gitna ng kalsada',
+                B: 'Sa pinakakanang bahagi ng kalsada',
+                C: 'Sa pinakakaliwang bahagi ng kalsada',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kapag ang paglabag sa R.A. No. 10666 sa Safety Children Aboard Motorcycle ay nagresulta ng kamatayan o pinsala, ano ang ipapataw na parusa sa motorcycle rider o operator nito?',
+            img: '',
+            options: {
+                A: 'Isang (1) taon ng pagkakakulong na walang ibibigay na pagkiling ayon sa Revised Penal Code 1',
+                B: 'Anim (6) na buwan ng pagkakakulong',
+                C: 'Limang (5) buwan ng pagkakakulong',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ayon sa R.A. No. 4136, anong bahagi ng sasakyan ang ipinagbabawal na putulin o tanggalin?',
+            img: '',
+            options: {
+                A: 'Kable ng preno',
+                B: 'Accelerator cable',
+                C: 'Muffler',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kung walang mga pananda sa daan o pavement markings, ikaw ay nararapat magmaneho:',
+            img: '',
+            options: {
+                A: 'malapit sa kanang bahagi ng kalsada',
+                B: 'kahit saang bahagi ng kalsada',
+                C: 'sa gitna ng kalsada',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Saan mo makikita ang senyas trapiko na ito?',
+            img: 'images/signs-haligi-tulay-tawiran.png',
+            options: {
+                A: 'Bago makarating sa tulay',
+                B: 'Bago magpalit ng linya',
+                C: 'Sa haligi ng tulay tawiran',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Maiiwasan at mababawasan ang mga aksidente sa kalsada kung:',
+            img: '',
+            options: {
+                A: 'hindi binabale-wala ng mga driver ang mga senyas pantrapiko na naroroon sa mga partikular na lugar',
+                B: 'ganap na binabale-wala ng mga driver ang mga senyas pantrapiko na naroon sa mga partikular na lugar',
+                C: 'hindi pinapansin ng mga driver ang mga senyas pantrapiko sa mga partikular na lugar',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Bakit may mga nakalagay na rumble strips sa mga kalsada?',
+            img: '',
+            options: {
+                A: 'Upang matulungan kang mapanatili ang tamang distansya',
+                B: 'Upang matulungan kang pumili ng tamang lane',
+                C: 'Upang matawag ang iyong kamalayan sa bilis ng iyong takbo',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Sa aling mga sitwasyon na maaring gamitin ang telepono habang nagmamaneho ng sasakyan?',
+            img: '',
+            options: {
+                A: 'Kung ito ay isang mahalagang tawag',
+                B: 'Kung magaan ang trapiko',
+                C: 'Wala sa itaas',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano taong may kapansanan ay maaring magkaroon ng lisensya sa pagmamaneho kung:',
+            img: '',
+            options: {
+                A: 'nakasulat sa lisensya ang kanyang karamdaman',
+                B: 'nakasulat sa student permit ang kaniyang karamdaman',
+                C: 'may kasamang kwalipikadong nagtuturo',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang maksimum at pinahihintulutang lapad ng saddle box o bag?',
+            img: '',
+            options: {
+                A: '14 na pulgada mula sa magkabilang gilid',
+                B: '16 na pulgada mula sa magkabilang gilid',
+                C: '18 na pulgada mula sa magkabilang gilid',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang dapat gawin ng isang driver kung siya ay dadaan sa isang kalye na maraming tao na tumatawid?',
+            img: '',
+            options: {
+                A: 'Bagalan ang takbo, maging alerto, o maingat at tingnan kung ligtas ang pagdaan',
+                B: 'Magpatuloy sa normal na bilis ng takbo',
+                C: 'Bumusina at pailawin ang mga head light',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang dapat mong gawin kung pinapatakbo ka ng pulis pantrapiko kahit na pula na ang traffic light o senyas na nagpapahinto?',
+            img: '',
+            options: {
+                A: 'Hindi pa dapat sumunod sapagkat kung susunod ka ay huhulihin ka',
+                B: 'Dapat kang sumunod',
+                C: 'Hindi mo dapat pansinin ang pulis pantrapiko at hintayin ang traffic light na berde',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Sino ang responsable para siguraduhing hindi sobra sa dami ang nakasakay ng sasakyan?',
+            img: '',
+            options: {
+                A: 'Ang driver ng sasakyan',
+                B: 'Ang nagpapasakay sa sasakyan',
+                C: 'Ang may-ari ng sasakyan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Upang makapagmaneho sa kalsada, kinakailangang nakahanda ang mga ganitong dokumento:',
+            img: '',
+            options: {
+                A: 'lisensya at rehistro ng sasakyan ng driver',
+                B: 'valid na lisensya ng driver, sertipiko ng pagrehistro, at kasalukuyang opisyal na resibo ng sasakyan',
+                C: 'sertipiko ng public convenience',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng senyas trapiko na ito?',
+            img: 'images/signs-end-60kph-zone.png',
+            options: {
+                A: 'Bawal pumasok ang mga sasakyang 30 taon ang edad',
+                B: 'Pinakamababang itinakdang bilis',
+                C: 'Katapusan ng pinakamataas na itinakdang bilis',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kung liliko pakanan, nararapat na:',
+            img: '',
+            options: {
+                A: 'bagalan ang takbo, manatili sa pinakalabas na bahagi ng daan, at mag-signal upang lumiko sa kanan',
+                B: 'manatili sa kaliwang daan ng kalsada at mag-signal upang lumiko sa kanan 15 metro bago lumiko',
+                C: 'manatili sa kanang daan ng kalsada at mag-signal upang lumiko sa kanan 30 metro bago lumiko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang R.A. No. 10666 sa Safety Children Aboard Motorcycle na nagbabawal sa bata na sumakay sa mga pampublikong kalsada kung saan may mabigat na dami ng sasakyan, mayroong mataas na kakapalan ng mabilis na paglipat ng mga sasakyan kung saan ang limit:',
+            img: '',
+            options: {
+                A: 'Ang paa ng sakay na bata ay komportableng naabot ang karaniwang pedal ng motorsiklo',
+                B: 'Ang mga bisig ng bata ay umabot at nahahawakan ang baywang ng driver ng motorsiklo',
+                C: 'Isakay ang bata sa motorsiklo na ang mga paa ay hindi maabot ang pedal',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Maari kang magmaneho sa pathway kung:',
+            img: '',
+            options: {
+                A: 'kapag walang taong naglalakad ng malapit',
+                B: 'papasok sa isang pag-aari',
+                C: 'para maka-overtake sa mabagal na daloy ng trapiko',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kapag nasa sangandaan at nakita ng driver na mula sa dilaw o yellow light signal ay nagpalit ito sa pula o red ay:',
+            img: '',
+            options: {
+                A: 'magmamabagal ito para hayaan ang ibang sasakyan na magpatuloy',
+                B: 'hihinto ito sa daan',
+                C: 'magpapatuloy ito sa intersksyon kahit ang ilaw ay pula',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Alin ang tamang pagkakasunod-sunod ng traffic light?',
+            img: '',
+            options: {
+                A: 'Pula - Berde, Dilaw - Berde, Berde - Pula',
+                B: 'Pula - Berde, Dilaw - Pula, Pula - Dilaw',
+                C: 'Pula - Berde, Berde - Dilaw, Dilaw - Pula',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Habang nagmamaneho ay may ginagawang daan, May pansamantala na pinakamataas na limitasyong bilis na karatula, ano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Sumunod',
+                B: 'Hindi susunod',
+                C: 'Sumunod lang kapag makitid ang daan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Magkano ang paruso para sa pangalawang opensa ng R.A. No. 10666 Children\'s Safety on Motorcycle Act of 2015?',
+            img: '',
+            options: {
+                A: 'PHP 1,000',
+                B: 'PHP 5,000',
+                C: 'PHP 7,000',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kung ikaw ay nasa ilalim ng impluwensya ng inuming nakakalasing habang nagmamaneho, malamang ikaw ay:',
+            img: '',
+            options: {
+                A: 'makakapagdesisyon ng mahusay',
+                B: 'makakapag-isip ng mas mahusay',
+                C: 'mabagal ang reaksyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang traffic light ay nagpalit mula sa berde pa dilaw habang nasa pasangandaan ka. Ano ang dapat mong gawin?',
+            img: '',
+            options: {
+                A: 'Magpatuloy lang sa iyong kasalukuyang bilis',
+                B: 'Huminto kahit nasa sangandaan',
+                C: 'Huminto bago mag sangandaan',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng pavement marking na ito?',
+            img: 'images/pavement-double-solid-white-lane.png',
+            options: {
+                A: 'Bawal pumarada',
+                B: 'Bawal mag-overtake ang trailer',
+                C: 'Linyang naghihiwalay sa magkasalubong na direksyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Anong senyas pantrapiko na kung babalewalain ay may kaakibat na parusa:',
+            img: '',
+            options: {
+                A: 'Regulatory signs',
+                B: 'Warning signs',
+                C: 'Informative signs',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang dapat gawin kapag nagmamaneho sa highway na may maraming lubak?',
+            img: '',
+            options: {
+                A: 'Bilisan ang takbo',
+                B: 'Bagalan ang takbo',
+                C: 'Palaging lumipat ng daan o lane',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Hindi maaring pumarada o huminto ang driver sa tabi ng kalsada na may nakasulat na "Stop" sign kung ito ay sakop ng:',
+            img: '',
+            options: {
+                A: '3 metro',
+                B: '5 metro',
+                C: '6 metro',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang isinasaad sa batas na dapat mo sundin kapag papalapit sa isang interseksyon na may isang stop sign?',
+            img: '',
+            options: {
+                A: 'Magbigay ng daan kung kinakailangan sa mga sasakyan papalapit mula sa kaliwa hanggang kanan',
+                B: 'Itigil at magpatuloy kapag ligtas na gawin ito',
+                C: 'Pabagalin ang sasakyan at magpatuloy kapag ligtas na gawin ito',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang gagawin mo kung ikaw ay dumating sa interseksyon na may sirang signal pantrapiko?',
+            img: '',
+            options: {
+                A: 'Ipagpalagay na ang interseksyon ay nakasenyas ng "Hinto" sa lahat ng direksyon',
+                B: 'Bilisan ang takbo',
+                C: 'Bagalan ang takbo at hintayin ang traffic enforcer',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang pinakamabuting gawin kung ikaw ay inimbitahan sa hapunan at alam mong ikaw ay magmamaneho pauwi?',
+            img: '',
+            options: {
+                A: 'Kumain ng mainit na pagkain at uminom ng alak',
+                B: 'Iwasang paghalu-haluin ang mga alak na iniinom',
+                C: 'Huwag uminom ng anumang alak',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kailan mo dapat tingnan ang lebel ng langis ng makina ng sasakyan?',
+            img: '',
+            options: {
+                A: 'Kapag mainit ang makina',
+                B: 'Kapag umaandar ang makina',
+                C: 'Kapag malamig ang makina',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang pinakamainam na paraan sa pagbibigay ng karapatang dumaan?',
+            img: '',
+            options: {
+                A: 'Pagbibigay ng daan',
+                B: 'Pagpapabilis ng pag-andar',
+                C: 'Ang unang dumarating ang unang pagbibigyan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang magiging resulta ng hindi pagpatay ng signal light matapos lumiko mula sa interseksyon?',
+            img: '',
+            options: {
+                A: 'Makakapagpalito sa lahat ng mga nasa daan',
+                B: 'Makakapagpalito sa lahat ng motorist',
+                C: 'Makakapagpalito sa mga tagapagpatupad ng batas pantrapiko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang kailangan mong gawin kung masundan mo ang truck na may ganitong kumukurap-kurap na senyas as kaniyang likuran?',
+            img: '',
+            options: {
+                A: 'Magnaheho papalayo sa truck',
+                B: 'Dumaan sa kanyang linya',
+                C: 'Dumaan sa kaliwang linya',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang kailangan mong gawin kung masundan mo ang truck na may ganitong kumukurap-kurap na senyas as kaniyang likuran?',
+            img: 'images/signs-truck-kaliwang-linya.png',
+            options: {
+                A: 'Magnaheho papalayo sa truck',
+                B: 'Dumaan sa kanyang linya',
+                C: 'Dumaan sa kaliwang linya',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Saan hindi maaring magparada ng sasakyan?',
+            img: '',
+            options: {
+                A: '7 metro mula as interseksyon',
+                B: '6 metro mula sa interseksyon',
+                C: '8 metro mula sa interseksyon',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang dapat mong gawin sa kumikislap na dilaw na trapikong ilaw?',
+            img: '',
+            options: {
+                A: 'Ang signal na ito ay nagsasabi na hindi ka makakaliko sa sangandaan, kaya dumiretso ka lang',
+                B: 'Magmaneho ng maingat, para itong "Give Way" sign',
+                C: 'Huminto, magbigay daan at magpatuloy kapag ligtas',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kapag ang driver ay nakalabag ng pangatlong ulit sa R.A. No. 10666 sa Safety Children Aboard Motorcycle, ang kanyang lisensya ay masususpinde ng gaano katagal?',
+            img: '',
+            options: {
+                A: '1 taon',
+                B: 'Pagkatanggal (Habang buhay)',
+                C: '1 buwan',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Mas delikado lumiko sa kaliwa kesa lumiko sa kanan dahil:',
+            img: '',
+            options: {
+                A: 'ang kalsada ay mas madaming linya',
+                B: 'mas mabilis ang mga sasakyan mula sa kaliwa',
+                C: 'kailangan mong maging maingat sa mga sasakyan galing sa kaliwa o kanan na parte ng daan',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Paano mo maiiwasan ang maaksayang paggamit ng gasolina?',
+            img: '',
+            options: {
+                A: 'Punuin ng gasolina ang saddle o top box',
+                B: 'Bihira lamang na patingnan ang kondisyon ng sasakyan',
+                C: 'Napapatingnan nang wasto at napapanatili ang kondisyon ng sasakyan',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang yellow box pavement marking ay ipinipinta sa loob ng interseksyon na walang sasakyan ang:',
+            img: '',
+            options: {
+                A: 'pinahihintulutang dumaan',
+                B: 'pinahihintulutang bumusina',
+                C: 'pinahihintulutang huminto',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Lumapit ka sa isang interseksyon na may isang hanay ng mga signal ng trapiko. Ang mga signal ay blanko. Ano ang dapat mong gawin?',
+            img: '',
+            options: {
+                A: 'Ituring ang mga interseksyon na mayroon pa rin mga palatandaan ng STOP sa lahat ng direksyon',
+                B: 'Huminto sa interseksyon na parang mayroon kang isang pulang ilaw',
+                C: 'Pabagalin at maghanda upang magbigay daan sa anumang trapiko sa unahan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Maari ka bang manatili sa loob ng interseksyon?',
+            img: '',
+            options: {
+                A: 'Kung ang ilaw pantrapiko ay kulay pula',
+                B: 'Kung ikaw ay nakatigil',
+                C: 'Hindi maari, ang interseksyon ay nararapat na maluwag sa lahat ng oras',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang asul na traffic sign ay may nakasulat na "60 km/oras". Ano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Magmaneho sa maksimum na bilis na 60 km/oras',
+                B: 'Magmaneho sa minimum na bilis na 60 km/oras',
+                C: 'Magmaneho nang 60 minuto kada kilometro',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Nagmaneho ka hanggang sa isang interseksyon at nakita mo ang senyas na ito. Ano ang dapat mong gawin?',
+            img: 'images/signs-inverted-red-triangle.png',
+            options: {
+                A: 'Mapanitili ang bilis dahil ang lahat ng trapiko sa unahan ay dapat magbigay sayo',
+                B: 'Dumating sa isang kumpletong paghinto at magpatuloy pagkatapos ng pagbibigay sa anumang mga naglalakad at trapiko',
+                C: 'Pabagalin at maghanda na magbigay sa anumang mga naglalakad at trapiko sa unahan',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Dumating ka sa krus na daan, at gusto mong lumiko sa kaliwa at mayroon kang berdeng arrow na ilaw, Makakatuloy kaba?',
+            img: '',
+            options: {
+                A: 'Oo, makakaliko ka dahil walang ibang sasakyan ang pwedeng pumasok sa sangandaan',
+                B: 'Hindi, hindi ka makakaliko maliban na lang kung mayroon kang green left pointing arrow',
+                C: 'Oo, makakaliko ka sa kaliwa ngunit kailangan mo pa ring magbigay daan sa taong naglalakad at trapiko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Paano mo itinatapon ang langis ng makina ng motorsiklo na nagamit na?',
+            img: '',
+            options: {
+                A: 'Itapon ito nang maayos sa pamamagitan ng pagbuhos nito sa sahig',
+                B: 'Itapon ito nang maayos sa pamamagitan ng pagdala sa mga "oil change facilities"',
+                C: 'Itapon ito nang maayos sa pamamagitan ng paglagay nito sa iyong basurahan',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Bilang isang driver ikaw ay higit na makakapagdulot ng pinsala sa kapaligiran sa pamamagitan ng:',
+            img: '',
+            options: {
+                A: 'pagpapatakbo ng matulin',
+                B: 'pumili ng sasakyan na matipid sa gasolina',
+                C: 'regular na pagpapatingin at pagmamantene ng iyong sasakyan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kung kakaliwa, saan dapat nakaposisyon ang iyong motorsiklo?',
+            img: '',
+            options: {
+                A: 'Sa pinakamalapit na kurbada ng highway',
+                B: 'Sa pinakamalapit sa gitna ng highway',
+                C: 'Sa pinakamalapit sa gilid ng linya ng highway',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Sa gabi nakita mo may taong naglalakad na nakasuot ng nagrerepleksyon na damit at may dalang matingkad na pulang ilaw. Ano ang ibig sabihin nito?',
+            img: '',
+            options: {
+                A: 'Papalapit ka sa accident black spot',
+                B: 'Papalapit ka sa ginagawang kalsada',
+                C: 'Papalapit ka sa organisadong paglalakad',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang U-turn ay ginagamit upang lumipat sa kabilang direksyon. Alin sa mga sumusunod ang hindi pinahihintulutan?',
+            img: '',
+            options: {
+                A: 'Pag U-turn sa pandalawahang daanan na hinahati ng putol-putol na puting linya',
+                B: 'Pag U-turn ayon sa patnubay ng traffic enforcer',
+                C: 'Pag U-turn sa lane na may dobleng buong guhit na dilaw',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Pwede kang mag-overtake kapag ang highway ay may dalawang linya ng:',
+            img: '',
+            options: {
+                A: 'hiwa-hiwalay na puting linya',
+                B: 'puting linyang tuloy-tuloy',
+                C: 'dilaw na linyang tuloy-tuloy',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Higit na mapanganib na lumiko sa kaliwa kaysa sa kanan dahil:',
+            img: '',
+            options: {
+                A: 'higit na maraming daanan o lane ang kalsada',
+                B: 'ang sasakyang galing sa kabilang direksyon ay higit na mabilis',
+                C: 'higit na maraming nagtitinda sa kanang bahagi ng kalsada',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang pangunahing layunin ng pagtingin sa harapan habang nagmamaneho ay:',
+            img: '',
+            options: {
+                A: 'upang tingnan kung may mga traffic enforcers',
+                B: 'upang tingnan ang daloy ng trapiko sa unahan at mga pagbabago sa kondisyon ng daan',
+                C: 'upang tingnan kung may aksidente',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang nakalarawan:',
+            img: 'images/signs-baku-bakong-kalsada.png',
+            options: {
+                A: 'madulas na kalsada',
+                B: 'baku-bakong kalsada',
+                C: 'matarik na kalsada',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang nakalarawan?',
+            img: 'images/signs-sasanib-sa-trapiko.png',
+            options: {
+                A: 'Papasok sa sangandaan',
+                B: 'Sasanib sa trapiko pagpasok sa sangandaan',
+                C: 'Papasok sa sangandaan na may kalsada sa gilid',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Sino ang prayoridad sa interseksyon kung may dalawang sasakyan na dumating nang sabay sa 90° na posisyon?',
+            img: '',
+            options: {
+                A: 'Ang sasakyang nasa kaliwa ng prayoridad',
+                B: 'May prayoridad ang higit na malaking sasakyan',
+                C: 'Ang sasakyang nasa kanan ang may prayoridad',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Pinahihintulutan ng Temporary Operator\'s Permit (TOP) ang nahuling driver na nagmamaneho ng sasakyan sa loob ng hindi lalampas sa:',
+            img: '',
+            options: {
+                A: '72 oras',
+                B: '1 linggo',
+                C: '15 araw',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang mga karatula sa limitasyon ng bilis sa mga daan ay dapat itura na:',
+            img: '',
+            options: {
+                A: 'ang inirerekomenda na bilis sa pinakahindi maayos na kondisyon ng daan at panahon',
+                B: 'ang inirerekomenda na bilis sa pinakamaayos na kondisyon ng daan at panahon',
+                C: 'ang inirerekomenda na bilis sa kahit anong kondisyon ng daan at panahon',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kapag lumiliko sa kanan, dapat mong:',
+            img: '',
+            options: {
+                A: 'manatili sa iyong linya saka i-signal ang iyong pagliko sa kanan kahit 30 metro bago mo gawin ang pagliko',
+                B: 'manatili sa kaliwang linya ng daan saka i-signal ang iyong pagliko sa kanan kahit 15 metro bago gawin ang pagliko',
+                C: 'manatili sa kanang linya ng daan saka i-signal ang iyong pagliko sa kanan kahit 15 minuto bago mo gawin ang pagliko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kapag lumiko mula sa isang interseksyon papunta sa one-way na kalye, alin ang linya na dapat mong piliin?',
+            img: '',
+            options: {
+                A: 'Kapag lumiko sa kanan, manatili sa kanang linya',
+                B: 'Kapag lumiko pakanan, manatili sa pinakaloob na daan',
+                C: 'Kapag lumiko sa kanan, manatili sa kaliwang linya',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ayon sa R.A. No. 10666 o Children\'s Safety on Motrocycle Act, naabot o nayayakap dapat ng batang angkas ang baywang ng driver, komportableng naitatapak ang paa sa foot peg, at:',
+            img: '',
+            options: {
+                A: 'hindi dapat bababa sa limang (5) talampakan ang taas',
+                B: 'kinakailangang nakasuot ng standard protective helmet',
+                C: 'kinakailangang may pahintulot ng magulang',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ilang araw dapat asikasuhin ang paglabag na batas sa trapiko sa LTO upang maiwasan ang pagkakasuspinde?',
+            img: '',
+            options: {
+                A: 'Sa loob ng 15 araw',
+                B: 'Sa loob ng 10 araw',
+                C: 'Sa loob ng 30 araw',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang mga linya, simbolo, at mga salitang nakapinta sa kalsada ay tinatawag na:',
+            img: '',
+            options: {
+                A: 'mga traffic signal',
+                B: 'pavement markings',
+                C: 'traffic hazards',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng senyas trapiko na ito?',
+            img: 'images/signs-katapusan-tinakdang-bilis.png',
+            options: {
+                A: 'Bawal pumasok',
+                B: 'Umpisa ng itinakdang bilis',
+                C: 'Katapusan ng itinakdang bilis',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang ibig sabigin ng sign ng trapiko sa kalsada na "Yield the right of way" ay:',
+            img: '',
+            options: {
+                A: 'baliktad na tatsulok',
+                B: 'patayong tatsulok',
+                C: 'pahiga na tatsulok',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kapag ang sasakyang nakaharap sa iyo ay may nakakasilaw na ilaw na bumubulag sa iyong paningin, ano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Buksan ang iyong head light ng nakakasilaw',
+                B: 'Huwag tumingin sa nakakasilaw na ilaw, tumingin ng mabilis sa kanang bahagi ng daan',
+                C: 'Tumingin sa nakakasilaw na ilaw',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang mga signs na bilog, nakabaligtad na tatsulok o octagonal, at may pulang kulay na hangganan o red colored border ay tinatawag na:',
+            img: '',
+            options: {
+                A: 'mga palatandaan ng regulasyon',
+                B: 'mga warning sign',
+                C: 'mga palatandaan na nagbibigay kaalaman',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang pinakamabuting alituntunin pangkaligtasan habang ikaw ay nagmamaneho?',
+            img: '',
+            options: {
+                A: 'Huwag ipilit ang karapatan sa daan',
+                B: 'Bumusina upang ipilit ang iyong karapatan sa daan',
+                C: 'Laging igiit ang karapatan sa daan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'May nag-iintay na makatawid sa tawiran ng taong naglalakad. Nakatayo pa sila sa may semento. Ano ang gagawin mo?',
+            img: '',
+            options: {
+                A: 'Bilisan bago sila nakapunta sa tawiran',
+                B: 'Huminto, hayaan silang makatawid, maghintay',
+                C: 'Huwag pansinin ang mga ito habang sila ay nasa bangketa pa',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang dapat mong gawin kung basa ang kalsada?',
+            img: '',
+            options: {
+                A: 'Bilisan pa ang takbo',
+                B: 'Magpatuloy sa pagliko-liko',
+                C: 'Bagalan ang takbo',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang ibig sabihin ng kumikislap na pulang ilaw ay:',
+            img: '',
+            options: {
+                A: 'huminto',
+                B: 'pagpatuloy',
+                C: 'bagalan ang takbo',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ano ang nararapat gawin pag may sasakyang nag-overtake sayo?',
+            img: '',
+            options: {
+                A: 'Bilisan ang takbo upang walang makapag-overtake',
+                B: 'Panatilihin ang bilis ng takbo',
+                C: 'Tapakan ang preno at hayaang makalampas ang sasakyang mag-oovertake',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang hindi ligtas na lugar sa paglusot o pag-overtake?',
+            img: '',
+            options: {
+                A: 'Kapag papalapit sa tulay o kurba',
+                B: 'Sa interseksyon',
+                C: 'Lahat ng sagot',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang susunod pagkatapos ng ilaw na ito?',
+            img: 'images/stoplight-yellow.png',
+            options: {
+                A: 'Asul',
+                B: 'Berde',
+                C: 'Pula',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang mga traffic sign, traffic signal, mga babala, at pavement markins ay para sa:',
+            img: '',
+            options: {
+                A: 'motorista lamang',
+                B: 'lahat ng gumagamit ng kalsada',
+                C: 'mga taong dumadaan lamang',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kapag papalapit sa interseksyong may karatulang nagsasabing magpadaan o yield, kailangang:',
+            img: '',
+            options: {
+                A: 'huminto bago pumasok sa interseksyon',
+                B: 'bagalan ang takbo, pagkatapos ay pumasok sa interseksyon kung ligtas',
+                C: 'pumasok agad sa interseksyon',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang mga signal sa pagliko ay dapat gamitin:',
+            img: '',
+            options: {
+                A: 'bago umalis sa interseksyon',
+                B: 'habang patungo sa interseksyon',
+                C: 'bago lumiko sa interseksyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang mga driver ay nararapat na laging magbigay ng daan sa mga sasakyang may blinkers at sirena na nakabukas dahil sila ay:',
+            img: '',
+            options: {
+                A: 'malalaking sasakyan',
+                B: 'maliliit na sasakyan',
+                C: 'sasakyang tumutugon sa gipit na kalagayan/emergency',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang isang putol-putol na puting linya sa dalawang daan na kalsada ay:',
+            img: '',
+            options: {
+                A: 'walang mag-oovertake',
+                B: 'pagdaan o pag-overtake ay maaring gawin kahit anong oras',
+                C: 'naghahati sa trapiko na gumagalaw sa magkabilang direksyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang dapat mong gawin bago bumago ng mga daanan?',
+            img: '',
+            options: {
+                A: 'Gumawa ng signal',
+                B: 'Suriin ang trapiko sa unahan',
+                C: 'Suriin sa salamin kung may trapiko sa likod',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang traffic sign na "No Stopping" ay nangangahulugan na:',
+            img: '',
+            options: {
+                A: 'maari kang huminto sandali kung magsasakay o magbababa ng pasahero ng mabilis',
+                B: 'hindi maaring huminto maliban kung tatanggap ng tawag',
+                C: 'hindi ka maaring huminto maliban kung pinapahinto ng traffic enforcers',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ayon sa mga sumusunod, alin ang hindi ipinagbabawal ng Anti-Distracted Driving Act?',
+            img: '',
+            options: {
+                A: 'Pagbabasa ng e-books o e-mail',
+                B: 'Pagbabadala o pagbabasa ng mensahe mula sa iyong mobile device',
+                C: 'Paggamit ng hands-free device',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang dapat gawin ng driver kung siya ay nasa loob ng interseksyon nang biglang maging dilaw ang ilaw ng pantrapiko?',
+            img: '',
+            options: {
+                A: 'Bagalan ang takbo upang hayaan ang ibang mga sasakyan na makatawid',
+                B: 'Otomatikong huminta sa kalsada',
+                C: 'Ang driver ay maaring magpatuloy nang maingat',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Lumapit ka sa isang kantong hindi gumagana ang mga ilaw ng trapiko. Isang traffic enforcer ang nagbibigay ng signal na ito. Dapat mo:',
+            img: 'images/enforcer-stop-hand-signal.png',
+            options: {
+                A: 'huminto sa linya ng paghinto',
+                B: 'iiwan lang',
+                C: 'itigil ang antas sa braso ng nakakasakit',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang maramihang linya ng paglalakbay sa parehong direksyon ay nahahati ng anong kulay na linya sa daan?',
+            img: '',
+            options: {
+                A: 'Pula',
+                B: 'Orange',
+                C: 'Puti',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang road rage ay marahas na galit sanhi ng stress at pagkabigo sa pagmamaneho ng sasakyang de-motor sa mahirap na kalagayan lalo na kung ang driver ay nakakaranas ng:',
+            img: '',
+            options: {
+                A: 'matinding trapik o gridlock',
+                B: 'kaligayahan at kagalingan',
+                C: 'maluwag na daloy ng mga sasakyan sa daan na karaniwang maraming dumadaang sasakyan',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Nais mong kumaliwa sa krosing na may berdeng ilaw na tumuturo pakaliwa. Maari ka pa rin bang magpatuloy?',
+            img: '',
+            options: {
+                A: 'Oo, maari kang lumiko pakaliwa',
+                B: 'Hindi ka maaring lumiko pakaliwa',
+                C: 'Hindi, maghintay hanggang sa maging dilaw ang ilaw pantrapiko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang mga sumasakay sa motorsiklo ay dapat may pangangalaga at maingat. Dapat silang magsuot ng:',
+            img: '',
+            options: {
+                A: 'mga helmet na pang-construction',
+                B: 'mga crash helmet',
+                C: 'sumbrero ng policeman o guwantes',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Kumpletuhin ang tamang pahayag: Hindi mo dapat gamitin ang busina kapag ang iyong sasakyan ay nakatigil:',
+            img: '',
+            options: {
+                A: 'maliban kung ang isang gumagalaw na sasakyan ay maaring maging sanhi ng panganib',
+                B: 'maliban kung ito ay ginagamit lamang nang saglit',
+                C: 'maliban sa pagbigay na senyales na nakarating ka na',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Sa anong pagkakataon na hindi maaring mag-overtake?',
+            img: '',
+            options: {
+                A: 'Tuwing gabi',
+                B: 'Kung umuulan',
+                C: 'Sa blind curve',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Upang mabawasan ang pinsala ng iyong sasakyan sa kapaligiran na dapat mong:',
+            img: '',
+            options: {
+                A: 'prumeno sa maayos na oras',
+                B: 'gumamit ng makitid na mga kalye',
+                C: 'gumamit ng mga busy na ruta',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kailan legal na gamitin ang balikat ng kalsada para sa dumadaan na ibang sasakyan?',
+            img: '',
+            options: {
+                A: 'Kapag ang sasakyan sa harap mo ay lumilikong pakanan',
+                B: 'Kapag ang sasakyan sa harap mo ay lumilikong pakaliwa',
+                C: 'Hindi ka pinahihintulutang dumaan gamit ang balikat ng kalsada',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kapag may sakit, ang iyong kakayanan sa pagmamaneho ay maaring maging hindi maayos. Dapat kang:',
+            img: '',
+            options: {
+                A: 'uminom lamang ng kakaunting gamit',
+                B: 'makipagkita sa iyong doktor kada bago magmaneho',
+                C: 'huwag magmaneho matapos uminom ng kahit anong gamit',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang nakalarawan?',
+            img: 'images/signs-tawiran-ng-hayop.png',
+            options: {
+                A: 'Bawal tumawid ang hayop',
+                B: 'Kulungan ng hayop',
+                C: 'Tawiran ng hayop',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ang paglagpas sa bilis ng limitasyon ng pagmamaneho ay:',
+            img: '',
+            options: {
+                A: 'pinapayagan lamang kapag lumagpas sa isa pang sasakyan',
+                B: 'pinapayagan lamang kapag ang iba pang mga sasakyan ay mas mabilis kaysa sa limitasyon ng bilis sa pagmamaneho',
+                C: 'hindi pinahihintulutan ng legal',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang gagawin mo kung ang break lights ng nasa harap mong sasakyan ay umilaw?',
+            img: '',
+            options: {
+                A: 'Maghandang pumreno',
+                B: 'Bumusina',
+                C: 'Lumiko sa kanan o kaliwa',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kung balak mong bumagal o huminto, dapat mong:',
+            img: '',
+            options: {
+                A: 'bumusina',
+                B: 'tapakan ang iyong preno nang magaan upang buksan ang iyong mga ilaw sa preno',
+                C: 'manatili sa iyong linya pagkatapos huminto',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang kulay berdeng traffic light sa interseksyon ay nangangahulugang:',
+            img: '',
+            options: {
+                A: 'pinahihintulutang tumawid ang mga tao sa lahat ng tawirang pantao',
+                B: 'hindi pinahihintulutang tumawid ang mga tao sa lahat ng tawirang pantao',
+                C: 'ang mga sasakyan sa kabilang kalsada ay nakahinto',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang pinakamabuting gawin kung ikaw ay inaantok habang nagmamaneho?',
+            img: '',
+            options: {
+                A: 'Buksan ang radyo nang napakalakas',
+                B: 'Magmaneho ng higit na mabilis',
+                C: 'Huminto sa tamang pahingahan at magpahinga',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kapag papalapit sa kurbada o palikong bahagi ng highway, dapat:',
+            img: '',
+            options: {
+                A: 'bagalan ang takbo bago lumiko',
+                B: 'bilisan ang takbo habang paliko',
+                C: 'biglang magpreno habang lumiliko',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Aksidente kang nakabangga ng taong naglalakad. Ano ang unang dapat mong gawin?',
+            img: '',
+            options: {
+                A: 'Tulungan ang taong naglalakad',
+                B: 'Maghanap ng ligtas na lugar para pumarada',
+                C: 'Tumawag ng pulis',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Tama ba na ang mga direksyon na ibinibigay ng mga traffic enforcers ay naayon sa traffic sign, traffic signal at pavement markings?',
+            img: '',
+            options: {
+                A: 'Mali',
+                B: 'Tama',
+                C: 'Tama, pasubaling ang traffic enforcers ay may ranggo',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang dalawahang highway na iyong pupuntahan ay makitid na daan. Dapat kang:',
+            img: '',
+            options: {
+                A: 'maghintay hanggang sa wala nang sasakyan sa magkabilang direksyon',
+                B: 'dumiretso agad at huwag alalahanin ang tungkol sa karapatan sa daan',
+                C: 'maghintay ng iba pang mga sasakyan at sundan ang mga ito',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Alin sa mga sumusunod ang nakalarawan?',
+            img: 'images/signs-ilog.png',
+            options: {
+                A: 'Matarik ang kalsada',
+                B: 'Sirang kalsada',
+                C: 'Ilog',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Nagpaplano ka ng mahabang paglalakbay. Kailangan mo pa bang magplano ng pagpapahinga?',
+            img: '',
+            options: {
+                A: 'Hindi, hindi ka masyadong mapapagod kapag nakarating ka agad',
+                B: 'Hindi, pagpapagasolina lamang ang kailangan',
+                C: 'Oo, makakatulong ito sa konsentrasyon',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Kapag naunahan ka ng kotse, ano ang dapat mong gawin?',
+            img: '',
+            options: {
+                A: 'Dagdagan ang bilis upang hindi maabutan',
+                B: 'Manatili sa kasalukuyang bilis',
+                C: 'Pindutin ang preno at hayaan ng mauna ang sasakyan',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Sa basang daan, dapat kang:',
+            img: '',
+            options: {
+                A: 'patuloy na paggewang',
+                B: 'magmabagal',
+                C: 'dagdagan ang iyong bilis',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ano ang nararapat mong gawin kung ikaw ay umiinom ng mga gamot na maaring makaapekto sa iyong pagmamaneho?',
+            img: '',
+            options: {
+                A: 'Humingi ng payo sa doktor bago magmaneho',
+                B: 'Magmaneho lamang kung may kasama na lisensyadong driver',
+                C: 'Limitahan ang pagmamaneho sa umaga',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Kapag kailangan mo ng salamin sa mata para makakita ng maayos, kailan mo dapat ito isuot?',
+            img: '',
+            options: {
+                A: 'Sa pangit na panahon',
+                B: 'Sa mabigat na daloy ng trapiko',
+                C: 'Kapag nagmamaneho',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Sino ang partikular na hindi kasama sa R.A. No. 10666?',
+            img: '',
+            options: {
+                A: 'Batang nangangailangan agad ng atensyong medikal',
+                B: 'Batang kailangang pumunta sa paaralan',
+                C: 'Lahat ng nabanggit',
+            },
+            answer: 'A'
+        },
+        {
+            question: 'Ang kumikislap na berdeng ilaw ay nangangahulugang:',
+            img: '',
+            options: {
+                A: 'hinto',
+                B: 'magpatuloy ng may pag-iingat',
+                C: 'bagalan at maghanda sa paghinto kung saan tumatawid ang taong naglalakad',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Magkano ang ipinataw na multa sa opensang paglabag sa R.A. No. 10666 sa Safety Children Aboard Motorcycle?',
+            img: '',
+            options: {
+                A: 'Php 1,500',
+                B: 'Php 3,000',
+                C: 'Php 5,000',
+            },
+            answer: 'B'
+        },
+        {
+            question: 'Ang U-turn ay ginagamit para magbago ng direksyon. Alin sa mga sumusunod ang pinapayagan?',
+            img: '',
+            options: {
+                A: 'Kung saan walang U-turn sign na nakalagay',
+                B: 'Sa one-way na kalye',
+                C: 'Kung walang sasakyan na paparating sa kabilang panig na magreresulta ng asgabal o masamang aksidente',
+            },
+            answer: 'C'
+        },
+        {
+            question: 'Ano ang ibig sabihin ng senyas trapiko na ito?',
+            img: 'images/signs-one-way.png',
+            options: {
+                A: 'One-way',
+                B: 'Bawal pumasok ang lahat ng klase ng sasakyan',
+                C: 'Pagtatapos ng kalsada sa unahan',
+            },
+            answer: 'A'
+        },
+    ];
+</script>
+<script src="script.js"></script>
+</html>
