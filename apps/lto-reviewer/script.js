@@ -29,19 +29,45 @@ var data_handler = {
 };
 
 var data = new Proxy({
-    questions_indexes: Array.from(Array(window.questions.length).keys()),
+    questions_indexes: [],
     questions: window.questions,
     question_number: 0,
-    question: {},
+    question: {
+        question: '',
+        img: '',
+        options: {
+            A: '',
+            B: '',
+            C: '',
+        },
+        answer: '',
+    },
     answered: false,
     score: 0,
 }, data_handler);
 
 window.onload = function() {
+    start();
+};
+
+function start() {
     window.question_total.innerHTML = data.questions.length;
+    data.questions_indexes = Array.from(Array(window.questions.length).keys());
+    data.question_number = 0;
+    data.question = {
+        question: '',
+        img: '',
+        options: {
+            A: '',
+            B: '',
+            C: '',
+        },
+        answer: '',
+    },
+    data.answered = false,
     data.score = 0;
     displayQuestion();
-};
+}
 
 function displayQuestion() {
     data.question_number += 1;
@@ -89,5 +115,13 @@ function answer(selected_option) {
 }
 
 function finish() {
-    //TODO
+    let confirmed = true;
+
+    if (data.questions_indexes.length > 0) {
+        confirmed = confirm('All questions are not yet answered. Are you sure you want to finish earlier?');
+    }
+
+    if (confirmed) {
+        start();
+    }
 }
