@@ -58,6 +58,16 @@ function displayQuestion() {
 }
 
 function next() {
+    if (!data.answered) {
+        alert('Select your answer before clicking Next');
+        return;
+    }
+
+    if (data.questions_indexes.length == 0) {
+        alert('You have answered the last question. There is no next question.');
+        return;
+    }
+
     displayQuestion();
 }
 
